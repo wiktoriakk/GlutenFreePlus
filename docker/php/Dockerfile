@@ -1,37 +1,22 @@
-FROM php:8.3.18RC1-fpm-alpine3.21
+FROM php:8.2-fpm-alpine
 
-ENV RUN_DEPS \
-    zlib \
-    libzip \
-    libpng \
-    libjpeg-turbo \
-    postgresql-libs
+# Instalacja rozszerzeń PHP potrzebnych do PostgreSQL
+RUN apk add --no-cache postgresql-dev \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 
-ENV BUILD_DEPS \
-    zlib-dev \
-    libzip-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    postgresql-dev
+# Instalacja dodatkowych narzędzi
+RUN apk add --no-cache bash
 
-ENV PHP_EXTENSIONS \
-    opcache \
-    zip \
-    gd \
-    bcmath \
-    pgsql \
-    pdo_pgsql
+# Ustaw katalog roboczy
+WORKDIR /app
 
-RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
-    && docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install -j "$(nproc)" $PHP_EXTENSIONS \
-    && apk del .build-deps
-
-RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
-
-RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
-
-# Copy the application code
+# Kopiuj kod aplikacji
 COPY . /app
 
-VOLUME ["/app"]
+# Ustaw uprawnienia
+RUN chown -R www-data:www-data /app
+
+# Eksponuj port 9000
+EXPOSE 9000
+
+CMD ["php-fpm"]

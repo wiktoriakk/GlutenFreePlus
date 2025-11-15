@@ -2,12 +2,20 @@
 
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/DashboardController.php';
-
+require_once 'src/controllers/CommunityController.php';
+require_once 'src/controllers/ProductController.php';
+require_once 'src/controllers/PlaceController.php';
+require_once 'src/controllers/RecipeController.php';
 
 class Routing {
     private static $instance = null;
     
     public static $routes = [
+        // Authentication routes
+        '' => [
+            'controller' => 'SecurityController',
+            'action' => 'login'
+        ],
         'login' => [
             'controller' => 'SecurityController',
             'action' => 'login'
@@ -16,14 +24,79 @@ class Routing {
             'controller' => 'SecurityController',
             'action' => 'register'
         ],
+        'logout' => [
+            'controller' => 'SecurityController',
+            'action' => 'logout'
+        ],
+        
+        // Dashboard
         'dashboard' => [
             'controller' => 'DashboardController',
             'action' => 'index'
         ],
-        // Dynamiczna trasa dla /dashboard/{id}
-        'dashboard/(\d+)' => [
-            'controller' => 'DashboardController',
+        
+        // Community routes
+        'community' => [
+            'controller' => 'CommunityController',
+            'action' => 'index'
+        ],
+        'community/search' => [
+            'controller' => 'CommunityController',
+            'action' => 'search'
+        ],
+        'community/profile/(\d+)' => [
+            'controller' => 'CommunityController',
+            'action' => 'profile'
+        ],
+        
+        // Product Scanner routes
+        'scanner' => [
+            'controller' => 'ProductController',
+            'action' => 'index'
+        ],
+        'scanner/search' => [
+            'controller' => 'ProductController',
+            'action' => 'search'
+        ],
+        'scanner/product/(\d+)' => [
+            'controller' => 'ProductController',
             'action' => 'show'
+        ],
+        
+        // Places routes
+        'places' => [
+            'controller' => 'PlaceController',
+            'action' => 'index'
+        ],
+        'places/search' => [
+            'controller' => 'PlaceController',
+            'action' => 'search'
+        ],
+        'places/(\d+)' => [
+            'controller' => 'PlaceController',
+            'action' => 'show'
+        ],
+        
+        // Recipes routes
+        'recipes' => [
+            'controller' => 'RecipeController',
+            'action' => 'index'
+        ],
+        'recipes/(\d+)' => [
+            'controller' => 'RecipeController',
+            'action' => 'show'
+        ],
+        'recipes/like/(\d+)' => [
+            'controller' => 'RecipeController',
+            'action' => 'like'
+        ],
+        'recipes/favorite/(\d+)' => [
+            'controller' => 'RecipeController',
+            'action' => 'favorite'
+        ],
+        'recipes/search' => [
+            'controller' => 'RecipeController',
+            'action' => 'search'
         ],
     ];
 
@@ -64,6 +137,24 @@ class Routing {
         }
         
         // Jeśli nie znaleziono trasy
+        http_response_code(404);
         include 'public/views/404.html';
+    }
+    
+    /**
+     * Sprawdza czy użytkownik jest zalogowany
+     */
+    public static function checkAuth() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+            exit();
+        }
+    }
+    
+    /**
+     * Zwraca zalogowanego użytkownika
+     */
+    public static function getAuthUser() {
+        return $_SESSION['user'] ?? null;
     }
 }
