@@ -7,13 +7,11 @@ services:
       dockerfile: docker/nginx/Dockerfile
     container_name: glutenfree-web
     ports:
-      - "3000:80"
+      - "8081:80"
     volumes:
-      - ./:/app/
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - .:/app/
     depends_on:
       - php
-      - db
     networks:
       - glutenfree-network
 
@@ -23,17 +21,11 @@ services:
       dockerfile: docker/php/Dockerfile
     container_name: glutenfree-php
     volumes:
-      - ./:/app
-    environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-    networks:
-      - glutenfree-network
+      - .:/app
     depends_on:
       - db
+    networks:
+      - glutenfree-network
 
   db:
     build:
@@ -41,14 +33,13 @@ services:
       dockerfile: docker/db/Dockerfile
     container_name: glutenfree-db
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      POSTGRES_DB: glutenfree_db
+      POSTGRES_USER: glutenfree_user
+      POSTGRES_PASSWORD: glutenfree_pass
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - ./database:/docker-entrypoint-initdb.d
+      - pg-data:/var/lib/postgresql/data
     networks:
       - glutenfree-network
 
@@ -57,17 +48,17 @@ services:
     container_name: glutenfree-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@glutenfree.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_PASSWORD: admin123
     ports:
       - "5050:80"
-    networks:
-      - glutenfree-network
     depends_on:
       - db
+    networks:
+      - glutenfree-network
 
 networks:
   glutenfree-network:
     driver: bridge
 
 volumes:
-  postgres-data:
+  pg-data:

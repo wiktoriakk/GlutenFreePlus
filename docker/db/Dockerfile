@@ -1,7 +1,7 @@
-FROM postgres
+FROM postgres:15-alpine
 
-ENV POSTGRES_PASSWORD docker
-ENV POSTGRES_DB db
-ENV POSTGRES_USER docker
+# Kopiuj skrypt inicjalizacyjny
+COPY docker/db/init.sql /docker-entrypoint-initdb.d/
 
-COPY . /app/database
+# Eksponuj port PostgreSQL
+EXPOSE 5432
