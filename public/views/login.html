@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GlutenFree+</title>
+    <link rel="stylesheet" href="/public/styles/main.css">
+    <link rel="stylesheet" href="/public/styles/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Logo -->
+            <div class="auth-logo">
+                <div class="logo-circle">
+                    <svg width="60" height="60" viewBox="0 0 60 60">
+                        <!-- Wheat icon placeholder -->
+                        <circle cx="30" cy="30" r="28" fill="none" stroke="#1B5E20" stroke-width="2"/>
+                        <path d="M30 10 L30 50 M20 15 L30 20 M40 15 L30 20 M20 25 L30 30 M40 25 L30 30 M20 35 L30 40 M40 35 L30 40" 
+                              stroke="#1B5E20" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+                <h1>GlutenFree+</h1>
+                <p class="tagline">Welcome back to your gluten-free world</p>
+            </div>
+
+            <!-- Error messages -->
+            <?php if (isset($errors) && !empty($errors)): ?>
+                <div class="error-box">
+                    <?php foreach ($errors as $error): ?>
+                        <p><?= htmlspecialchars($error) ?></p>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- Success message (from registration) -->
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="success-box">
+                    <p><?= htmlspecialchars($_SESSION['success']) ?></p>
+                </div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+
+            <!-- Login Form -->
+            <form method="POST" action="/login" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="victoria1@gmail.com"
+                        value="<?= htmlspecialchars($email ?? '') ?>"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="••••••••••••"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Login
+                </button>
+            </form>
+
+            <!-- Register link -->
+            <div class="auth-footer">
+                <p>New here? <a href="/register">Create account</a></p>
+            </div>
+
+            <!-- Demo credentials info -->
+            <div class="demo-info">
+                <small>Demo: admin@glutenfree.com / admin123</small>
+            </div>
+        </div>
+    </div>
+
+    <script src="/public/scripts/auth.js"></script>
+</body>
+</html>
