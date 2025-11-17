@@ -113,10 +113,10 @@ class Database {
         return $this->connection->rollBack();
     }
     
-    // Prevent cloning
+    // Prevents cloning
     private function __clone() {}
     
-    // Prevent unserialization
+    // Prevents unserialization
     public function __wakeup() {
         throw new Exception("Cannot unserialize singleton");
     }
