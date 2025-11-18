@@ -1,22 +1,27 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm
 
-# Instalacja rozszerzeń PHP potrzebnych do PostgreSQL
-RUN apk add --no-cache postgresql-dev \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    git \
+    curl \
+    zip \
+    unzip \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instalacja dodatkowych narzędzi
-RUN apk add --no-cache bash
-
-# Ustaw katalog roboczy
+# Set working directory
 WORKDIR /app
 
-# Kopiuj kod aplikacji
+# Copy application files
 COPY . /app
 
-# Ustaw uprawnienia
-RUN chown -R www-data:www-data /app
+# Set permissions
+RUN chown -R www-data:www-data /app \
+    && chmod -R 755 /app
 
-# Eksponuj port 9000
+USER www-data
+
 EXPOSE 9000
 
 CMD ["php-fpm"]

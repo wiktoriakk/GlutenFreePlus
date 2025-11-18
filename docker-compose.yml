@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
-    container_name: glutenfree-web
+    container_name: glutenfree-nginx
     ports:
       - "8081:80"
     volumes:
@@ -31,13 +31,12 @@ services:
     build:
       context: .
       dockerfile: docker/db/Dockerfile
-    container_name: glutenfree-db
-    environment:
-      POSTGRES_DB: glutenfree_db
-      POSTGRES_USER: glutenfree_user
-      POSTGRES_PASSWORD: glutenfree_pass
     ports:
       - "5433:5432"
+    environment:
+      POSTGRES_DB: glutenfree_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - pg-data:/var/lib/postgresql/data
     networks:
@@ -48,7 +47,7 @@ services:
     container_name: glutenfree-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@glutenfree.com
-      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
     depends_on:

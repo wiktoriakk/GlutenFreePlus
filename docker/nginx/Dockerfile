@@ -1,10 +1,5 @@
-FROM nginx:1.25-alpine
+FROM nginx:1.25
 
-# Kopiuj konfigurację nginx
-COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Ustaw katalog roboczy
 WORKDIR /app
-
-# Eksponuj port 80
-EXPOSE 80

@@ -1,32 +1,22 @@
+# Environment variables
+.env
+
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
 
 # Docker
-docker-compose.override.yml
+docker/db/data/
 
-# Dependencies
+# PHP
 vendor/
-node_modules/
-
-# Environment
-.env
-.env.local
+composer.lock
 
 # Logs
 *.log
 
-# Database
-*.sql.backup
-pgdata/
-
-# Temporary files
-tmp/
-temp/
+# OS
+.DS_Store
+Thumbs.db
