@@ -223,7 +223,9 @@ class SecurityController extends AppController {
     }
 
     private function createSession(User $user): void {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         session_regenerate_id(true);
 
         $_SESSION['user_id'] = $user->getId();
