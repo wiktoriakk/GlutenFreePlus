@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 - Forbidden</title>
+    <link rel="stylesheet" href="/public/styles/main.css">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            color: var(--color-text-light);
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">403</h1>
+        <p class="error-message">You don't have permission to access this page</p>
+        <a href="/dashboard" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+</body>
+</html>

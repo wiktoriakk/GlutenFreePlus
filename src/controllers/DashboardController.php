@@ -1,16 +1,26 @@
 <?php
 
 require_once 'AppController.php';
+require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+
 
 class DashboardController extends AppController {
     
     public function index(): void {
-        // Tymczasowa implementacja - będzie rozbudowana
-        $this->render('dashboard.html');
+        if (!AuthMiddleware::requireAuth()) {
+            return;
+        }
+        
+        $user = AuthMiddleware::getCurrentUser();
+        $this->render('dashboard.html', ['user' => $user]);
     }
     
     public function show(int $id): void {
-        // Do implementacji
-        $this->render('dashboard.html', ['userId' => $id]);
+        if (!AuthMiddleware::requireAuth()) {
+            return;
+        }
+        
+        $user = AuthMiddleware::getCurrentUser();
+        $this->render('dashboard.html', ['user' => $user, 'profileId' => $id]);
     }
 }
