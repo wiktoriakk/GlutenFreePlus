@@ -2,6 +2,8 @@
 
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/DashboardController.php';
+require_once 'src/controllers/CommunityController.php';
+
 
 class Routing {
     private static $instance = null;
@@ -30,6 +32,14 @@ class Routing {
         'dashboard/(\d+)' => [
             'controller' => 'DashboardController',
             'action' => 'show'
+        ],
+        'community' => [
+            'controller' => 'CommunityController',
+            'action' => 'index'
+        ],
+        'community/members' => [
+            'controller' => 'CommunityController',
+            'action' => 'getMembers'
         ],
     ];
 
