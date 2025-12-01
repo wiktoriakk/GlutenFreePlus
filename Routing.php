@@ -41,6 +41,14 @@ class Routing {
             'controller' => 'CommunityController',
             'action' => 'getMembers'
         ],
+        'scanner' => [
+            'controller' => 'ScannerController',
+            'action' => 'index'
+        ],
+        'scanner/search' => [
+            'controller' => 'ScannerController',
+            'action' => 'search'
+        ],
     ];
 
     private function __construct() {}

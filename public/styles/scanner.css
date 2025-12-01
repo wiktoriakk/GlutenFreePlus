@@ -1,0 +1,283 @@
+/* ==================== SCANNER PAGE ==================== */
+.scanner-content {
+    padding: var(--spacing-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.scanner-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+/* ==================== SEARCH SECTION ==================== */
+.search-section {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.search-section .search-bar {
+    flex: 1;
+    position: relative;
+}
+
+.search-section .search-bar svg {
+    position: absolute;
+    left: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+}
+
+.search-section .search-input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) 3rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-background);
+    font-family: var(--font-family);
+    font-size: 1rem;
+}
+
+.btn-scan {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+}
+
+.btn-scan:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ==================== PRODUCT RESULT ==================== */
+.product-result {
+    background-color: var(--color-background);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.product-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+.product-image {
+    width: 150px;
+    height: 150px;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-background-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-info {
+    flex: 1;
+}
+
+.product-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: var(--spacing-md);
+}
+
+.product-badge.certified {
+    background-color: #E8F5E9;
+    color: var(--color-success);
+}
+
+.product-badge svg {
+    width: 16px;
+    height: 16px;
+}
+
+.product-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+}
+
+.product-brand {
+    font-size: 1rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    color: var(--color-error);
+    transition: transform var(--transition-fast);
+}
+
+.favorite-btn:hover {
+    transform: scale(1.1);
+}
+
+.favorite-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.safety-status {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.safety-status.safe {
+    background-color: #E8F5E9;
+    color: var(--color-success);
+    border: 1px solid #C8E6C9;
+}
+
+.safety-status.uncertain {
+    background-color: #FFF3E0;
+    color: var(--color-warning);
+    border: 1px solid #FFE0B2;
+}
+
+.safety-status.unsafe {
+    background-color: #FFEBEE;
+    color: var(--color-error);
+    border: 1px solid #FFCDD2;
+}
+
+.safety-status strong {
+    font-weight: 600;
+}
+
+/* ==================== ALTERNATIVES ==================== */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-lg);
+}
+
+.alternatives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.alternative-card {
+    background-color: var(--color-background-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    border: 1px solid var(--color-border-light);
+}
+
+.alternative-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.alternative-image {
+    width: 100%;
+    height: 150px;
+    background-color: var(--color-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.alternative-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.alternative-info {
+    padding: var(--spacing-md);
+}
+
+.alternative-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.alternative-brand {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
+/* ==================== MOBILE RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    .scanner-content {
+        padding: var(--spacing-md);
+        padding-bottom: 100px;
+    }
+
+    .search-section {
+        flex-direction: column;
+    }
+
+    .btn-scan {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .product-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .product-image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .alternatives-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .alternative-image {
+        height: 120px;
+    }
+}
