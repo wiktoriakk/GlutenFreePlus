@@ -3,7 +3,7 @@
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/DashboardController.php';
 require_once 'src/controllers/CommunityController.php';
-
+require_once 'src/controllers/ScannerController.php';
 
 class Routing {
     private static $instance = null;
