@@ -49,6 +49,14 @@ class Routing {
             'controller' => 'ScannerController',
             'action' => 'search'
         ],
+        'discover' => [
+            'controller' => 'DiscoverController',
+            'action' => 'index'
+        ],
+        'discover/places' => [
+            'controller' => 'DiscoverController',
+            'action' => 'getPlaces'
+        ],
     ];
 
     private function __construct() {}
