@@ -4,6 +4,8 @@ require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/DashboardController.php';
 require_once 'src/controllers/CommunityController.php';
 require_once 'src/controllers/ScannerController.php';
+require_once 'src/controllers/DiscoverController.php';
+require_once 'src/controllers/RecipeController.php';
 
 class Routing {
     private static $instance = null;
@@ -56,6 +58,14 @@ class Routing {
         'discover/places' => [
             'controller' => 'DiscoverController',
             'action' => 'getPlaces'
+        ],
+        'recipes' => [
+            'controller' => 'RecipeController',
+            'action' => 'index'
+        ],
+        'recipes/get' => [
+            'controller' => 'RecipeController',
+            'action' => 'getRecipes'
         ],
     ];
 
