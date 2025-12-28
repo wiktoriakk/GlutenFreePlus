@@ -6,6 +6,7 @@ require_once 'src/controllers/CommunityController.php';
 require_once 'src/controllers/ScannerController.php';
 require_once 'src/controllers/DiscoverController.php';
 require_once 'src/controllers/RecipeController.php';
+require_once 'src/controllers/ProfileController.php';
 
 class Routing {
     private static $instance = null;
@@ -66,6 +67,14 @@ class Routing {
         'recipes/get' => [
             'controller' => 'RecipeController',
             'action' => 'getRecipes'
+        ],
+        'profile/(\d+)' => [
+            'controller' => 'ProfileController',
+            'action' => 'show'
+        ],
+        'profile/(\d+)/data' => [
+            'controller' => 'ProfileController', 
+            'action' => 'getData'
         ],
     ];
 
