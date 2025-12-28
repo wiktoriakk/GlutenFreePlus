@@ -52,15 +52,18 @@ class SecurityController extends AppController {
     }
 
     public function logout(): void {
-        session_start();
-        session_unset();
-        session_destroy();
-        
-        // Usuń ciasteczko sesji
+        // Wyczyść sesję
+        $_SESSION = [];
+    
+        // Zniszcz cookie sesji
         if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time() - 3600, '/');
         }
-        
+    
+        // Zniszcz sesję
+        session_destroy();
+    
+        // Przekieruj
         $this->redirect('/login');
     }
 
