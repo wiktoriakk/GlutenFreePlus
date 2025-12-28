@@ -177,4 +177,16 @@ body {
         padding: var(--spacing-lg);
         border-radius: var(--radius-lg);
     }
+
+/* ==================== ERROR STATES ==================== */
+.input-error {
+    border-color: var(--color-error) !important;
+}
+
+.form-error {
+    display: block;
+    color: var(--color-error);
+    font-size: 0.875rem;
+    margin-top: var(--spacing-xs);
+}
 }

@@ -8,7 +8,7 @@ class User {
     private string $role;
     private ?string $avatar = null;
     private ?string $bio = null;
-    private ?string $userType = null; // Celiac, Nutritionist, Food Blogger, Chef
+    private ?string $userType = null;
     private \DateTime $createdAt;
     private ?\DateTime $lastLogin = null;
     private bool $isActive = true;

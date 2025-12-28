@@ -100,11 +100,14 @@ class UserRepository extends Repository {
         return $this->execute($query, ['id' => $userId, 'password' => $hashedPassword]);
     }
 
-    public function updateLastLogin(int $userId): bool {
-        $query = "UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = :id";
-        return $this->execute($query, ['id' => $userId]);
+    public function updateLastLogin(int $userId): void {
+        $stmt = $this->database->connect()->prepare(
+            'UPDATE users SET last_login = NOW() WHERE id = :id'
+        );
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
     }
-
+    
     public function delete(int $id): bool {
         // Soft delete
         $query = "UPDATE users SET is_active = false WHERE id = :id";

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>400 - Bad Request</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #EDE9E3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .error-container {
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2D3748;
+            margin-bottom: 10px;
+        }
+        
+        .error-code {
+            font-size: 1.25rem;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            color: #4A5568;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #1B5E20;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2E7D32;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Bad Request</h1>
+        <p class="error-code">Error 400</p>
+        <p>The request could not be understood or was missing required parameters. Please check your input and try again.</p>
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>
