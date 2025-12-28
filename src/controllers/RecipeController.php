@@ -20,9 +20,13 @@ class RecipeController extends AppController {
             return;
         }
 
-        $type = $_GET['type'] ?? 'recipes'; // recipes, tips, favourites
+        $type = $_GET['type'] ?? 'recipes';
 
-        $recipes = $this->getMockRecipes();
+        if ($type === 'tips') {
+            $recipes = $this->getMockTips();
+        } else {
+            $recipes = $this->getMockRecipes();
+        }
 
         $this->json([
             'success' => true,
@@ -82,4 +86,41 @@ class RecipeController extends AppController {
             ],
         ];
     }
+
+private function getMockTips(): array {
+    return [
+        [
+            'id' => 1,
+            'title' => 'How to avoid cross-contamination in the kitchen',
+            'author_name' => 'SafetyFirst',
+            'image_url' => '',
+            'likes' => 145,
+            'comments' => 32
+        ],
+        [
+            'id' => 2,
+            'title' => 'Best gluten-free flour substitutes',
+            'author_name' => 'BakingPro',
+            'image_url' => '',
+            'likes' => 203,
+            'comments' => 67
+        ],
+        [
+            'id' => 3,
+            'title' => 'Dining out gluten-free: What to ask waiters',
+            'author_name' => 'CeliacTraveler',
+            'image_url' => '',
+            'likes' => 98,
+            'comments' => 41
+        ],
+        [
+            'id' => 4,
+            'title' => 'Reading food labels: Hidden gluten sources',
+            'author_name' => 'NutriExpert',
+            'image_url' => '',
+            'likes' => 187,
+            'comments' => 55
+        ],
+    ];
+}
 }
