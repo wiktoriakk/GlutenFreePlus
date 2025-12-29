@@ -33,9 +33,39 @@ class RecipeController extends AppController {
             return;
         }
 
+        $type = $_GET['type'] ?? 'recipes';
+
         try {
-            $recipes = $this->recipeRepository->getAllWithAuthor(50);
-            
+            if ($type === 'tips') {
+                // Get tips
+                $recipes = $this->recipeRepository->getAllWithAuthor(50);
+                $recipes = array_filter($recipes, function($recipe) {
+                    return isset($recipe['recipe_type']) && $recipe['recipe_type'] === 'tip';
+                });
+                $recipes = array_values($recipes);
+            } elseif ($type === 'favourites') {
+                // Get user's favorites
+                $currentUser = AuthMiddleware::getCurrentUser();
+                $userId = $currentUser['id'];
+                
+                $recipes = $this->recipeRepository->fetchAll(
+                    "SELECT r.*, u.name as author_name, u.avatar as author_avatar
+                    FROM recipes r 
+                    INNER JOIN users u ON r.author_id = u.id 
+                    INNER JOIN recipe_favorites rf ON r.id = rf.recipe_id 
+                    WHERE rf.user_id = :user_id AND r.is_published = true 
+                    ORDER BY rf.created_at DESC",
+                    ['user_id' => $userId]
+                );
+            } else {
+                // Get regular recipes
+                $recipes = $this->recipeRepository->getAllWithAuthor(50);
+                $recipes = array_filter($recipes, function($recipe) {
+                    return !isset($recipe['recipe_type']) || $recipe['recipe_type'] === 'recipe';
+                });
+                $recipes = array_values($recipes);
+            }
+        
             $this->json([
                 'success' => true,
                 'recipes' => $recipes
@@ -194,6 +224,8 @@ class RecipeController extends AppController {
             return;
         }
 
+        $currentUser = AuthMiddleware::getCurrentUser();
+        $userId = $currentUser['id'];
         $recipeId = (int)($_POST['recipe_id'] ?? 0);
         
         if (!$recipeId) {
@@ -210,15 +242,39 @@ class RecipeController extends AppController {
                 return;
             }
 
-            // For now, just increment likes
-            // In future: check favorites table to toggle
-            $this->recipeRepository->incrementLikes($recipeId);
+            // Check if already favorited
+            $existing = $this->recipeRepository->fetch(
+                "SELECT id FROM recipe_favorites WHERE user_id = :user_id AND recipe_id = :recipe_id",
+                ['user_id' => $userId, 'recipe_id' => $recipeId]
+            );
 
-            $this->json([
-                'success' => true,
-                'message' => 'Added to favorites',
-                'liked' => true
-            ]);
+            if ($existing) {
+                // Remove from favorites
+                $this->recipeRepository->execute(
+                    "DELETE FROM recipe_favorites WHERE user_id = :user_id AND recipe_id = :recipe_id",
+                    ['user_id' => $userId, 'recipe_id' => $recipeId]
+                );
+                $this->recipeRepository->decrementLikes($recipeId);
+                
+                $this->json([
+                    'success' => true,
+                    'message' => 'Removed from favorites',
+                    'liked' => false
+                ]);
+            } else {
+                // Add to favorites
+                $this->recipeRepository->execute(
+                    "INSERT INTO recipe_favorites (user_id, recipe_id) VALUES (:user_id, :recipe_id)",
+                    ['user_id' => $userId, 'recipe_id' => $recipeId]
+                );
+                $this->recipeRepository->incrementLikes($recipeId);
+                
+                $this->json([
+                    'success' => true,
+                    'message' => 'Added to favorites',
+                    'liked' => true
+                ]);
+            }
         } catch (Exception $e) {
             error_log('Toggle favorite error: ' . $e->getMessage());
             $this->json(['success' => false, 'error' => 'Operation failed'], 500);

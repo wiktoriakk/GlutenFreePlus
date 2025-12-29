@@ -158,4 +158,28 @@ class RecipeRepository extends Repository {
         
         return $this->fetchAll($query, ['limit' => $limit]);
     }
+
+    // Helper methods for raw queries
+    public function fetch(string $query, array $params = []): ?array {
+        $stmt = $this->database->connect()->prepare($query);
+        $stmt->execute($params);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
+    }
+
+    public function fetchAll(string $query, array $params = []): array {
+        $stmt = $this->database->connect()->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function execute(string $query, array $params = []): bool {
+        try {
+            $stmt = $this->database->connect()->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            error_log("Query execution failed: " . $e->getMessage());
+            return false;
+        }
+    }
 }
