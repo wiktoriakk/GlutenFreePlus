@@ -68,4 +68,41 @@ class ProfileController extends AppController {
             $this->json(['success' => false, 'error' => 'Server error'], 500);
         }
     }
+
+    /**
+ * Show current user's profile
+ */
+    public function showCurrent(): void {
+        if (!AuthMiddleware::requireAuth()) {
+            return;
+        }
+
+        $currentUser = AuthMiddleware::getCurrentUser();
+        $userId = $currentUser['id'] ?? $currentUser['user_id'] ?? null;
+    
+        if (!$userId) {
+            $this->redirect('/login');
+            return;
+        }
+    
+        try {
+            $user = $this->userRepository->findById((int)$userId);
+        
+            if (!$user) {
+                http_response_code(404);
+                include 'public/views/404.html';
+                return;
+            }
+
+            // Renderuj z danymi użytkownika
+            $this->render('profile.html', [
+                'user' => $user->toArray(),
+                'currentUser' => $currentUser,
+                'isOwnProfile' => true
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo "Error loading profile";
+        }
+    }
 }

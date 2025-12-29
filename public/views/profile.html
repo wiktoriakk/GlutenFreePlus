@@ -120,46 +120,47 @@
     </div>
 
     <script>
-        const userId = window.location.pathname.split('/').pop();
-        
-        fetch(`/profile/${userId}/data`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.success && data.user) {
-                    const user = data.user;
-                    
-                    document.getElementById('profile-name').textContent = user.name;
-                    document.getElementById('profile-email').textContent = user.email;
-                    
-                    if (user.user_type) {
-                        document.getElementById('profile-type').textContent = user.user_type;
-                        document.getElementById('profile-badge').style.display = 'inline-block';
-                    }
-                    
-                    const avatarDiv = document.getElementById('profile-avatar');
-                    if (user.avatar) {
-                        avatarDiv.innerHTML = `<img src="${user.avatar}" alt="${user.name}">`;
-                    } else {
-                        const initials = user.name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2);
-                        const gradient = getAvatarColor(user.name);
-                        avatarDiv.style.background = gradient;
-                        avatarDiv.innerHTML = `<span class="avatar-initials">${initials}</span>`;
-                    }
-                    
-                    if (user.bio) {
-                        document.getElementById('profile-bio-text').textContent = user.bio;
-                        document.getElementById('profile-bio-section').style.display = 'block';
-                    }
-                    
-                    if (user.created_at) {
-                        const date = new Date(user.created_at);
-                        const monthYear = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-                        document.getElementById('stat-joined').textContent = monthYear;
-                    }
-                }
-            })
-            .catch(err => console.error('Error:', err));
-        
+        <?php if (isset($user)): ?>
+        // Dane z PHP
+        const user = {
+            name: <?php echo json_encode($user['name'] ?? 'User'); ?>,
+            email: <?php echo json_encode($user['email'] ?? ''); ?>,
+            user_type: <?php echo json_encode($user['user_type'] ?? null); ?>,
+            avatar: <?php echo json_encode($user['avatar'] ?? null); ?>,
+            bio: <?php echo json_encode($user['bio'] ?? null); ?>,
+            created_at: <?php echo json_encode($user['created_at'] ?? date('Y-m-d')); ?>
+        };
+    
+        // Wyświetl dane
+        document.getElementById('profile-name').textContent = user.name;
+        document.getElementById('profile-email').textContent = user.email;
+    
+        if (user.user_type) {
+            document.getElementById('profile-type').textContent = user.user_type;
+            document.getElementById('profile-badge').style.display = 'inline-block';
+        }
+    
+        const avatarDiv = document.getElementById('profile-avatar');
+        if (user.avatar) {
+            avatarDiv.innerHTML = `<img src="${user.avatar}" alt="${user.name}">`;
+        } else {
+            const initials = user.name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2);
+            const gradient = getAvatarColor(user.name);
+            avatarDiv.style.background = gradient;
+            avatarDiv.innerHTML = `<span class="avatar-initials">${initials}</span>`;
+        }
+    
+        if (user.bio) {
+            document.getElementById('profile-bio-text').textContent = user.bio;
+            document.getElementById('profile-bio-section').style.display = 'block';
+        }
+    
+        if (user.created_at) {
+            const date = new Date(user.created_at);
+            const year = date.getFullYear();
+            document.getElementById('stat-joined').textContent = year;
+        }
+    
         function getAvatarColor(name) {
             const colors = [
                 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -170,6 +171,7 @@
             ];
             return colors[name.charCodeAt(0) % colors.length];
         }
-    </script>
+    <?php endif; ?>
+</script>
 </body>
 </html>

@@ -122,6 +122,10 @@ class Routing {
             'controller' => 'ModeratorController', 
             'action' => 'deleteComment'
         ],
+        'profile' => [
+            'controller' => 'ProfileController',
+            'action' => 'showCurrent'  
+        ],
     ];
 
     private function __construct() {}
