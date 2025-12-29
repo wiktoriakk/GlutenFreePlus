@@ -118,7 +118,7 @@ function initAddButton() {
     
     if (addBtn) {
         addBtn.addEventListener('click', function() {
-            alert('Add recipe feature coming soon!');
+            window.location.href = '/recipes/create';
         });
     }
 }
@@ -126,9 +126,8 @@ function initAddButton() {
 // ==================== VIEW RECIPE ====================
 
 function viewRecipe(recipeId) {
-    // W przyszłości przekierowanie do szczegółów przepisu
     console.log('View recipe:', recipeId);
-    alert(`Recipe details for ID ${recipeId} coming soon!`);
+    window.location.href = `/recipes/show?id=${recipeId}`;
 }
 
 // ==================== EMPTY STATE ====================

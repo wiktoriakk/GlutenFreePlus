@@ -2,10 +2,20 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../repository/RecipeRepository.php';
 require_once __DIR__ . '/../models/Recipe.php';
 
 class RecipeController extends AppController {
 
+    private RecipeRepository $recipeRepository;
+
+    public function __construct() {
+        $this->recipeRepository = new RecipeRepository();
+    }
+
+    /**
+     * Show recipes list page
+     */
     public function index(): void {
         if (!AuthMiddleware::requireAuth()) {
             return;
@@ -15,112 +25,247 @@ class RecipeController extends AppController {
         $this->render('recipes.html', ['user' => $user]);
     }
 
+    /**
+     * Get recipes (AJAX)
+     */
     public function getRecipes(): void {
         if (!AuthMiddleware::requireAuth()) {
             return;
         }
 
-        $type = $_GET['type'] ?? 'recipes';
+        try {
+            $recipes = $this->recipeRepository->getAllWithAuthor(50);
+            
+            $this->json([
+                'success' => true,
+                'recipes' => $recipes
+            ]);
+        } catch (Exception $e) {
+            error_log('Get recipes error: ' . $e->getMessage());
+            $this->json(['success' => false, 'error' => 'Failed to load recipes'], 500);
+        }
+    }
 
-        if ($type === 'tips') {
-            $recipes = $this->getMockTips();
-        } else {
-            $recipes = $this->getMockRecipes();
+    /**
+     * Show recipe details
+     */
+    public function show(): void {
+        if (!AuthMiddleware::requireAuth()) {
+            return;
         }
 
-        $this->json([
-            'success' => true,
-            'recipes' => $recipes
-        ]);
+        $recipeId = (int)($_GET['id'] ?? 0);
+        
+        if (!$recipeId) {
+            http_response_code(404);
+            $this->render('404.html');
+            return;
+        }
+
+        try {
+            $recipeData = $this->recipeRepository->findWithAuthor($recipeId);
+            
+            if (!$recipeData) {
+                http_response_code(404);
+                $this->render('404.html');
+                return;
+            }
+
+            $currentUser = AuthMiddleware::getCurrentUser();
+            $this->render('recipe-detail.html', [
+                'recipe' => $recipeData,
+                'currentUser' => $currentUser
+            ]);
+        } catch (Exception $e) {
+            error_log('Show recipe error: ' . $e->getMessage());
+            http_response_code(500);
+            echo "Error loading recipe";
+        }
     }
 
-    private function getMockRecipes(): array {
-        return [
-            [
-                'id' => 1,
-                'title' => 'Gluten free fluffy Pancakes',
-                'author_name' => 'GF_lady',
-                'image_url' => '/public/images/recipes/pancakes.jpg',
-                'likes' => 60,
-                'comments' => 41
-            ],
-            [
-                'id' => 2,
-                'title' => 'Gluten free banana bread',
-                'author_name' => 'GF CuppaTea',
-                'image_url' => '/public/images/recipes/banana_bread.jpg',
-                'likes' => 60,
-                'comments' => 41
-            ],
-            [
-                'id' => 3,
-                'title' => 'Gluten free dumplings',
-                'author_name' => 'AniaCooking',
-                'image_url' => '/public/images/recipes/dumplings.jpg',
-                'likes' => 60,
-                'comments' => 41
-            ],
-            [
-                'id' => 4,
-                'title' => 'Gluten free Lasagna',
-                'author_name' => 'Lexis_kitchen',
-                'image_url' => '/public/images/recipes/lasagna.jpg',
-                'likes' => 13,
-                'comments' => 5
-            ],
-            [
-                'id' => 5,
-                'title' => 'Gluten free pizza dough',
-                'author_name' => 'gfJules',
-                'image_url' => '/public/images/recipes/pizza.jpg',
-                'likes' => 60,
-                'comments' => 41
-            ],
-            [
-                'id' => 6,
-                'title' => 'Gluten free Strawberry cake',
-                'author_name' => 'Lola',
-                'image_url' => '/public/images/recipes/cake.jpg',
-                'likes' => 60,
-                'comments' => 41
-            ],
-        ];
+    /**
+     * Show create recipe form
+     */
+    public function create(): void {
+        if (!AuthMiddleware::requireAuth()) {
+            return;
+        }
+
+        $user = AuthMiddleware::getCurrentUser();
+        $this->render('recipe-form.html', ['user' => $user]);
     }
 
-private function getMockTips(): array {
-    return [
-        [
-            'id' => 1,
-            'title' => 'How to avoid cross-contamination in the kitchen',
-            'author_name' => 'SafetyFirst',
-            'image_url' => '',
-            'likes' => 145,
-            'comments' => 32
-        ],
-        [
-            'id' => 2,
-            'title' => 'Best gluten-free flour substitutes',
-            'author_name' => 'BakingPro',
-            'image_url' => '',
-            'likes' => 203,
-            'comments' => 67
-        ],
-        [
-            'id' => 3,
-            'title' => 'Dining out gluten-free: What to ask waiters',
-            'author_name' => 'CeliacTraveler',
-            'image_url' => '',
-            'likes' => 98,
-            'comments' => 41
-        ],
-        [
-            'id' => 4,
-            'title' => 'Reading food labels: Hidden gluten sources',
-            'author_name' => 'NutriExpert',
-            'image_url' => '',
-            'likes' => 187,
-            'comments' => 55
-        ],
-    ];
-}
+    /**
+     * Store new recipe
+     */
+    public function store(): void {
+        if (!AuthMiddleware::requireAuth()) {
+            return;
+        }
+
+        $currentUser = AuthMiddleware::getCurrentUser();
+        
+        // Validate input
+        $title = trim($_POST['title'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $ingredients = trim($_POST['ingredients'] ?? '');
+        $instructions = trim($_POST['instructions'] ?? '');
+        $prepTime = (int)($_POST['prep_time'] ?? 0);
+        $cookTime = (int)($_POST['cook_time'] ?? 0);
+        $servings = (int)($_POST['servings'] ?? 1);
+        $difficulty = $_POST['difficulty'] ?? null;
+
+        $errors = [];
+
+        if (empty($title)) {
+            $errors['title'] = 'Title is required';
+        } elseif (strlen($title) > 255) {
+            $errors['title'] = 'Title too long';
+        }
+
+        if (empty($ingredients)) {
+            $errors['ingredients'] = 'Ingredients are required';
+        }
+
+        if (empty($instructions)) {
+            $errors['instructions'] = 'Instructions are required';
+        }
+
+        if ($servings < 1) {
+            $errors['servings'] = 'Servings must be at least 1';
+        }
+
+        if ($difficulty && !in_array($difficulty, ['easy', 'medium', 'hard'])) {
+            $errors['difficulty'] = 'Invalid difficulty level';
+        }
+
+        if (!empty($errors)) {
+            $this->json(['success' => false, 'errors' => $errors], 400);
+            return;
+        }
+
+        try {
+            $recipe = new Recipe(
+                $title,
+                $ingredients,
+                $instructions,
+                $currentUser['id'],
+                $servings
+            );
+
+            if (!empty($description)) {
+                $recipe->setDescription($description);
+            }
+
+            if ($prepTime > 0) {
+                $recipe->setPrepTime($prepTime);
+            }
+
+            if ($cookTime > 0) {
+                $recipe->setCookTime($cookTime);
+            }
+
+            if ($difficulty) {
+                $recipe->setDifficulty($difficulty);
+            }
+
+            $createdRecipe = $this->recipeRepository->create($recipe);
+
+            if ($createdRecipe) {
+                $this->json([
+                    'success' => true,
+                    'message' => 'Recipe created successfully',
+                    'recipe_id' => $createdRecipe->getId()
+                ]);
+            } else {
+                $this->json(['success' => false, 'error' => 'Failed to create recipe'], 500);
+            }
+        } catch (Exception $e) {
+            error_log('Create recipe error: ' . $e->getMessage());
+            $this->json(['success' => false, 'error' => 'Server error'], 500);
+        }
+    }
+
+    /**
+     * Toggle favorite (like)
+     */
+    public function toggleFavorite(): void {
+        if (!AuthMiddleware::requireAuth()) {
+            return;
+        }
+
+        $recipeId = (int)($_POST['recipe_id'] ?? 0);
+        
+        if (!$recipeId) {
+            $this->json(['success' => false, 'error' => 'Invalid recipe ID'], 400);
+            return;
+        }
+
+        try {
+            // Check if recipe exists
+            $recipe = $this->recipeRepository->findById($recipeId);
+            
+            if (!$recipe) {
+                $this->json(['success' => false, 'error' => 'Recipe not found'], 404);
+                return;
+            }
+
+            // For now, just increment likes
+            // In future: check favorites table to toggle
+            $this->recipeRepository->incrementLikes($recipeId);
+
+            $this->json([
+                'success' => true,
+                'message' => 'Added to favorites',
+                'liked' => true
+            ]);
+        } catch (Exception $e) {
+            error_log('Toggle favorite error: ' . $e->getMessage());
+            $this->json(['success' => false, 'error' => 'Operation failed'], 500);
+        }
+    }
+
+    /**
+     * Delete recipe
+     */
+    public function delete(): void {
+        if (!AuthMiddleware::requireAuth()) {
+            return;
+        }
+
+        $currentUser = AuthMiddleware::getCurrentUser();
+        $recipeId = (int)($_POST['recipe_id'] ?? 0);
+        
+        if (!$recipeId) {
+            $this->json(['success' => false, 'error' => 'Invalid recipe ID'], 400);
+            return;
+        }
+
+        try {
+            $recipe = $this->recipeRepository->findById($recipeId);
+            
+            if (!$recipe) {
+                $this->json(['success' => false, 'error' => 'Recipe not found'], 404);
+                return;
+            }
+
+            // Check if user owns the recipe or is admin
+            if ($recipe->getAuthorId() !== $currentUser['id'] && $currentUser['role'] !== 'admin') {
+                $this->json(['success' => false, 'error' => 'Unauthorized'], 403);
+                return;
+            }
+
+            if ($this->recipeRepository->delete($recipeId)) {
+                $this->json([
+                    'success' => true,
+                    'message' => 'Recipe deleted successfully'
+                ]);
+            } else {
+                $this->json(['success' => false, 'error' => 'Failed to delete recipe'], 500);
+            }
+        } catch (Exception $e) {
+            error_log('Delete recipe error: ' . $e->getMessage());
+            $this->json(['success' => false, 'error' => 'Operation failed'], 500);
+        }
+    }
 }

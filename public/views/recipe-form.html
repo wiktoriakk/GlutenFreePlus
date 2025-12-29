@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recipe - GlutenFree+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/public/images/logo.png">
+    <link rel="stylesheet" href="/public/styles/main.css">
+    <link rel="stylesheet" href="/public/styles/dashboard.css">
+    <link rel="stylesheet" href="/public/styles/recipe-form.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="/public/images/logo.png" alt="Logo" width="40" height="40">
+                    <span class="logo-text">GlutenFree+</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    </svg>
+                    <span>Home</span>
+                </a>
+                <a href="/community" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Community</span>
+                </a>
+                <a href="/scanner" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    </svg>
+                    <span>Scanner</span>
+                </a>
+                <a href="/discover" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="10" r="3"></circle>
+                        <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"></path>
+                    </svg>
+                    <span>Discover Places</span>
+                </a>
+                <a href="/recipes" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+                        <path d="M7 2v20"></path>
+                    </svg>
+                    <span>Recipes</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <a href="/recipes" class="back-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Back
+                    </a>
+                    <h1>Add New Recipe</h1>
+                </div>
+                <div class="header-actions">
+                    <a href="/profile" class="btn btn-secondary">Profile</a>
+                    <a href="/logout" class="btn btn-secondary">Logout</a>
+                </div>
+            </header>
+
+            <div class="form-container">
+                <div id="alert-container"></div>
+
+                <form id="recipe-form" class="recipe-form">
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="title" class="form-label">Recipe Title *</label>
+                        <input 
+                            type="text" 
+                            id="title" 
+                            name="title" 
+                            class="form-input"
+                            placeholder="e.g., Gluten-Free Banana Bread"
+                            maxlength="255"
+                            required
+                        >
+                        <span class="form-error" id="title-error"></span>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea 
+                            id="description" 
+                            name="description" 
+                            class="form-textarea"
+                            placeholder="Brief description of your recipe..."
+                            rows="3"
+                        ></textarea>
+                        <span class="form-error" id="description-error"></span>
+                    </div>
+
+                    <!-- Ingredients -->
+                    <div class="form-group">
+                        <label for="ingredients" class="form-label">Ingredients *</label>
+                        <textarea 
+                            id="ingredients" 
+                            name="ingredients" 
+                            class="form-textarea"
+                            placeholder="List ingredients (one per line)&#10;- 2 cups gluten-free flour&#10;- 3 ripe bananas&#10;- 2 eggs"
+                            rows="8"
+                            required
+                        ></textarea>
+                        <span class="form-error" id="ingredients-error"></span>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="form-group">
+                        <label for="instructions" class="form-label">Instructions *</label>
+                        <textarea 
+                            id="instructions" 
+                            name="instructions" 
+                            class="form-textarea"
+                            placeholder="Step-by-step instructions&#10;1. Preheat oven to 350°F&#10;2. Mix dry ingredients..."
+                            rows="10"
+                            required
+                        ></textarea>
+                        <span class="form-error" id="instructions-error"></span>
+                    </div>
+
+                    <!-- Time and Servings Row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prep_time" class="form-label">Prep Time (minutes)</label>
+                            <input 
+                                type="number" 
+                                id="prep_time" 
+                                name="prep_time" 
+                                class="form-input"
+                                min="0"
+                                placeholder="15"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cook_time" class="form-label">Cook Time (minutes)</label>
+                            <input 
+                                type="number" 
+                                id="cook_time" 
+                                name="cook_time" 
+                                class="form-input"
+                                min="0"
+                                placeholder="50"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="servings" class="form-label">Servings *</label>
+                            <input 
+                                type="number" 
+                                id="servings" 
+                                name="servings" 
+                                class="form-input"
+                                min="1"
+                                value="4"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="difficulty" class="form-label">Difficulty</label>
+                            <select id="difficulty" name="difficulty" class="form-select">
+                                <option value="">Select...</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <a href="/recipes" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                            <span id="btn-text">Create Recipe</span>
+                            <div id="btn-spinner" class="spinner" style="display: none;"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="/public/scripts/recipe-form.js"></script>
+</body>
+</html>

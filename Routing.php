@@ -126,6 +126,34 @@ class Routing {
             'controller' => 'ProfileController',
             'action' => 'showCurrent'  
         ],
+        'recipes' => [
+            'controller' => 'RecipeController', 
+            'action' => 'index'
+        ],
+        'recipes/get' => [
+            'controller' => 'RecipeController', 
+            'action' => 'getRecipes'
+        ],
+        'recipes/create' => [
+            'controller' => 'RecipeController', 
+            'action' => 'create'
+        ],
+        'recipes/store' => [
+            'controller' => 'RecipeController', 
+            'action' => 'store'
+        ],
+        'recipes/show' => [
+            'controller' => 'RecipeController', 
+            'action' => 'show'
+        ],
+        'recipes/toggle-favorite' => [
+            'controller' => 'RecipeController', 
+            'action' => 'toggleFavorite'
+        ],
+        'recipes/delete' => [
+            'controller' => 'RecipeController', 
+            'action' => 'delete'
+        ],
     ];
 
     private function __construct() {}
