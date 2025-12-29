@@ -1,12 +1,37 @@
 // ==================== RECIPE FORM JS ====================
 
+// Image preview
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('recipe-form');
-    
-    if (form) {
-        form.addEventListener('submit', handleSubmit);
+    const imageInput = document.getElementById('image');
+    if (imageInput) {
+        imageInput.addEventListener('change', handleImagePreview);
     }
 });
+
+function handleImagePreview(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+        showAlert('Image too large. Maximum size is 5MB.', 'error');
+        e.target.value = '';
+        return;
+    }
+    
+    // Show preview
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('preview-img').src = e.target.result;
+        document.getElementById('image-preview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImage() {
+    document.getElementById('image').value = '';
+    document.getElementById('image-preview').style.display = 'none';
+}
 
 async function handleSubmit(e) {
     e.preventDefault();
