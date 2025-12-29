@@ -29,7 +29,7 @@ class ProfileController extends AppController {
             }
 
             $this->render('profile.html', [
-                'user' => $user,
+                'user' => $user->toArray(),
                 'currentUser' => $currentUser,
                 'isOwnProfile' => ($currentUser['id'] ?? $currentUser['user_id'] ?? null) == $userId
             ]);
@@ -70,8 +70,8 @@ class ProfileController extends AppController {
     }
 
     /**
- * Show current user's profile
- */
+     * Show current user's profile
+     */
     public function showCurrent(): void {
         if (!AuthMiddleware::requireAuth()) {
             return;
