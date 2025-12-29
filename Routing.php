@@ -7,6 +7,7 @@ require_once 'src/controllers/ScannerController.php';
 require_once 'src/controllers/DiscoverController.php';
 require_once 'src/controllers/RecipeController.php';
 require_once 'src/controllers/ProfileController.php';
+require_once 'src/controllers/AdminController.php';
 
 class Routing {
     private static $instance = null;
@@ -75,6 +76,26 @@ class Routing {
         'profile/(\d+)/data' => [
             'controller' => 'ProfileController', 
             'action' => 'getData'
+        ],
+        'admin/users' => [
+            'controller' => 'AdminController', 
+            'action' => 'users'
+        ],
+        'admin/users/list' => [
+            'controller' => 'AdminController', 
+            'action' => 'getUsersList'
+        ],
+        'admin/users/toggle-status' => [
+            'controller' => 'AdminController', 
+            'action' => 'toggleUserStatus'
+        ],
+        'admin/users/change-role' => [
+            'controller' => 'AdminController', 
+            'action' => 'changeUserRole'
+        ],
+        'admin/users/delete' => [
+            'controller' => 'AdminController', 
+            'action' => 'deleteUser'
         ],
     ];
 
