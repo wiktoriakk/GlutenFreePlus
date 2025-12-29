@@ -1,8 +1,6 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
+// Error Handler (do NOT display errors in production)
 require_once 'src/middleware/ErrorHandler.php';
 ErrorHandler::init();
 

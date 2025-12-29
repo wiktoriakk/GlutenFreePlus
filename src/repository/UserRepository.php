@@ -42,8 +42,8 @@ class UserRepository extends Repository {
 
     public function create(User $user): ?User {
         $query = "
-            INSERT INTO users (email, password, name, role, avatar, bio, user_type) 
-            VALUES (:email, :password, :name, :role, :avatar, :bio, :user_type)
+            INSERT INTO users (email, password, name, role, avatar, user_type) 
+            VALUES (:email, :password, :name, :role, :avatar, :user_type)
             RETURNING id, created_at
         ";
 
@@ -55,7 +55,6 @@ class UserRepository extends Repository {
                 'name' => $user->getName(),
                 'role' => $user->getRole(),
                 'avatar' => $user->getAvatar(),
-                'bio' => $user->getBio(),
                 'user_type' => $user->getUserType(),
             ]);
 
@@ -78,7 +77,6 @@ class UserRepository extends Repository {
             SET email = :email, 
                 name = :name, 
                 avatar = :avatar, 
-                bio = :bio, 
                 user_type = :user_type,
                 role = :role
             WHERE id = :id
@@ -89,7 +87,6 @@ class UserRepository extends Repository {
             'email' => $user->getEmail(),
             'name' => $user->getName(),
             'avatar' => $user->getAvatar(),
-            'bio' => $user->getBio(),
             'user_type' => $user->getUserType(),
             'role' => $user->getRole(),
         ]);

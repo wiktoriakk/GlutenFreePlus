@@ -171,6 +171,9 @@ class SecurityController extends AppController {
         // Regenerate session ID to prevent session fixation
         session_regenerate_id(true);
         
+        $_SESSION['logged_in'] = true;
+        $_SESSION['login_time'] = time();
+
         // Store minimal user data in session
         $_SESSION['user_id'] = $user->getId();
         $_SESSION['user_email'] = $user->getEmail();

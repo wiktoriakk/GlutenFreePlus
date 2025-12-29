@@ -70,10 +70,7 @@ async function handleLogin(e) {
         }
         
         if (data.success) {
-            showAlert('Login successful! Redirecting...', 'success');
-            setTimeout(() => {
-                window.location.href = data.redirect || '/dashboard';
-            }, 500);
+            window.location.href = data.redirect || '/dashboard';
         } else {
             showAlert(data.error || 'Invalid email or password', 'error');
         }
