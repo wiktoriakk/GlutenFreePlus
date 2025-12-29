@@ -33,7 +33,7 @@ class AdminController extends AppController {
     }
     
     /**
-     * Get users list (AJAX)
+     * Get users list 
      */
     public function getUsersList(): void {
         if (!AuthMiddleware::requireAuth()) {

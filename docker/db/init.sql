@@ -1,7 +1,4 @@
 -- ==================== GLUTENFREE+ DATABASE SCHEMA ====================
--- Created: 2025-11-23
--- Version: 1.0
--- PostgreSQL 15
 
 -- Drop existing tables if exists (for development)
 DROP TABLE IF EXISTS ratings CASCADE;

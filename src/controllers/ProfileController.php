@@ -94,7 +94,7 @@ class ProfileController extends AppController {
                 return;
             }
 
-            // Renderuj z danymi użytkownika
+            // Render with user data   
             $this->render('profile.html', [
                 'user' => $user->toArray(),
                 'currentUser' => $currentUser,

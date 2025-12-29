@@ -11,8 +11,6 @@ class ModeratorController extends AppController {
     private $commentRepository;
 
     public function __construct() {
-        // Repositories will be added when Post/Comment are implemented
-        // For now, we'll use mock data
     }
 
     /**
@@ -67,7 +65,7 @@ class ModeratorController extends AppController {
     }
     
     /**
-     * Get comments for moderation (AJAX)
+     * Get comments for moderation 
      */
     public function getCommentsList(): void {
         if (!AuthMiddleware::requireAuth()) {
