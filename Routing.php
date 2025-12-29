@@ -8,6 +8,7 @@ require_once 'src/controllers/DiscoverController.php';
 require_once 'src/controllers/RecipeController.php';
 require_once 'src/controllers/ProfileController.php';
 require_once 'src/controllers/AdminController.php';
+require_once 'src/controllers/ModeratorController.php';
 
 class Routing {
     private static $instance = null;
@@ -96,6 +97,30 @@ class Routing {
         'admin/users/delete' => [
             'controller' => 'AdminController', 
             'action' => 'deleteUser'
+        ],
+        'moderator/content' => [
+            'controller' => 'ModeratorController', 
+            'action' => 'content'
+        ],
+        'moderator/posts/list' => [
+            'controller' => 'ModeratorController', 
+            'action' => 'getPostsList'
+        ],
+        'moderator/comments/list' => [
+            'controller' => 'ModeratorController', 
+            'action' => 'getCommentsList'
+        ],
+        'moderator/posts/delete' => [
+            'controller' => 'ModeratorController', 
+            'action' => 'deletePost'
+        ],
+        'moderator/posts/hide' => [
+            'controller' => 'ModeratorController', 
+            'action' => 'hidePost'
+        ],
+        'moderator/comments/delete' => [
+            'controller' => 'ModeratorController', 
+            'action' => 'deleteComment'
         ],
     ];
 
